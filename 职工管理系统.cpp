@@ -50,8 +50,10 @@ int main() {
 			wm.findEmp();
 			break;
 		case 6:
+			wm.sortEmp();
 			break;
 		case 7:
+			wm.cleanFile();
 			break;
 		default:
 			system("cls");

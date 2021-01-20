@@ -33,6 +33,10 @@ public:
 	void modityEmp();
 
 	void findEmp();
+
+	void sortEmp();
+
+	void cleanFile();
 	////////////////////////////////////////////
 	int getEmpNum();
 

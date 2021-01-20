@@ -332,8 +332,96 @@ void WorkerManager::findEmp() {
 	system("cls");
 }
 
+void WorkerManager::sortEmp() {//使用选择排序
+	if (this->fileIsEmpty) {
+		cout << "file is empty or not exit" << endl;
+		system("pause");
+		system("cls");
+		return;
+	}
+	else {
+		cout << "please choice sort type: ";
+		cout << "1.up num  2.down mun" << endl;
+
+		int select = 0;
+		cin >> select;
+		for (int i = 0; i < this->empNum; i++) {
+			int minOrMax = i;//声明最小值或最大值
+			for (int j = i + 1; j < this->empNum; j++) {
+				if (select == 1) {//升序
+					if (this->empArray[minOrMax]->id > this->empArray[j]->id) {
+						minOrMax = j;
+					}
+				}
+				else {//降序
+					if (this->empArray[minOrMax]->id < this->empArray[j]->id) {
+						minOrMax = j;
+					}
+				}
+			}
+			//判断最开始认定的最小值或最大值是否是计算的最小值或最大值，如果不是，交换数据
+			if (i != minOrMax) {
+				Worker* temp = this->empArray[i];
+				this->empArray[i] = this->empArray[minOrMax];
+				this->empArray[minOrMax] = temp;
+			}
+		}
+		cout << "sort successful" << endl;
+		this->saveFile();
+		this->showEmp();
+	}
+
+}
+
+void WorkerManager::cleanFile() {
+	if (this->fileIsEmpty) {
+		cout << "file is empty or not exit" << endl;
+		system("pause");
+		system("cls");
+		return;
+	}
+	else {
+		cout << "make sure you want to delete this file" << endl;
+		cout << "1.yes" << endl;
+		cout << "2.no" << endl;
+		int select = 0;
+		cin >> select;
+		if (select == 1) {
+			ofstream ofs;
+			ofs.open(FILENAME, ios::trunc);//清除之后再重新创建
+			ofs.close();
+			if (this->empArray != NULL) {
+				/*
+				删除堆区的每个职工对象
+				*/
+				for (int i = 0; i < this->empNum; i++) {
+					delete this->empArray[i];
+					this->empArray[i] = NULL;
+				}
+				//删除堆区数组的指针
+				delete[] this->empArray;
+				this->empArray = NULL;
+				this->empNum = 0;
+				this->fileIsEmpty = true;
+
+			}
+			cout << "clean file success!" << endl;
+		}
+		else {
+			return;
+		}
+		
+	}
+	
+}
+
 WorkerManager::~WorkerManager() {
 	if (this->empArray != NULL) {//可以不写
+		for (int i = 0; i < this->empNum; i++) {
+			if (this->empArray[i] != NULL) {
+				delete this->empArray[i];
+			}
+		}
 		delete[] this->empArray;
 		this->empArray = NULL;
 	}
